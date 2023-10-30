@@ -17,7 +17,13 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
       with:
+        path: 'runner'
+
+    - uses: actions/checkout@v2
+      with:
+        repository: ${{secrets.TRACKER_REPO}}
         token: ${{secrets.GH_WRITE_TOKEN}}
+        path: 'tracker'
 
     - uses: actions/setup-node@v3
       with:
@@ -28,12 +34,15 @@ jobs:
 
     - name: ⚙ Install node dependencies
       run: npm i
+      working-directory: ./runner
 
     - name: 🚀 Sync with azure
       run: npm run start
+      working-directory: ./runner
       env:
         PAT: ${{secrets.PAT}}
         ORG: ${{secrets.ORG}}
         DAYS_LOOKUP: ${{secrets.DAYS_LOOKUP}}
+        COMMITS_FOLDER_PATH: ../tracker
 
     

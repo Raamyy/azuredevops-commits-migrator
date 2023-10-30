@@ -29,8 +29,8 @@ async function getProjects() {
     }
   };
   let projects = await axios.get(url, config);
-  console.log(projects.data);
-  console.log(`got ${projects.data.count} projects`);
+  log(projects.data);
+  log(`got ${projects.data.count} projects`);
   return projects.data.value.map(p => p.name);
 }
 
@@ -48,8 +48,8 @@ async function getRepositories(project) {
     }
   };
   let repos = await axios.get(url, config);
-  console.log(`got ${repos.data.count} repos in ${project} project`);
-  // console.log(repos.data.value);
+  log(`got ${repos.data.count} repos in ${project} project`);
+  // log(repos.data.value);
   return repos.data.value.filter(r => r.isDisabled == false && r.defaultBranch).map((p) => {
     return {
       name: p.name,
@@ -66,7 +66,7 @@ async function getCommits(project, repo, author, branch) {
   let fromDate = moment().subtract(process.env.DAYS_LOOKUP ?? 1, 'days').format('MM/DD/yyyy').toString();
 
   do {
-    console.log(`getting page ${currentPage} commits in ${project} project ${repo} repo`);
+    log(`getting page ${currentPage} commits in ${project} project ${repo} repo`);
     const url = `https://dev.azure.com/${ORG}/${project}/_apis/git/repositories/${repo}/commits?searchCriteria.author=${author}&api-version=7.1-preview.1&searchCriteria.itemVersion.version=${branch}&searchCriteria.itemVersion.versionType=branch&searchCriteria.fromDate=${fromDate}&$top=${pageSize}&$skip=${currentPage * pageSize}`;
     let config = {
       method: 'get',
@@ -92,7 +92,7 @@ async function getCommits(project, repo, author, branch) {
     currentPage++;
   } while (count == pageSize)
 
-  console.log(`got ${allCommits.length} commits in ${project} project ${repo} repo`);
+  log(`got ${allCommits.length} commits in ${project} project ${repo} repo`);
   return allCommits;
 }
 
@@ -100,8 +100,7 @@ async function getCommits(project, repo, author, branch) {
 async function generateGitCommits(commits) {
   if (!commits.length) return;
   let i = 1;
-  console.log(COMMITS_FOLDER_PATH);
-  console.log(await execAsync(`ls`));
+  log("commiting to: ", COMMITS_FOLDER_PATH);
   for (const commit of commits) {
     let formattedDate = moment(commit.creationDate).format('YYYY-MM-DD HH:MM:SS');
     const text = `### _${formattedDate}_ **${commit.comment}** ([link](${commit.remoteUrl}))\n\n`
@@ -113,8 +112,8 @@ async function generateGitCommits(commits) {
     console.log(`${i}/${commits.length}`);
     i++;
   }
-  console.log(`committed all ${commits.length} commits`);
-  // await execAsync(`git push origin master`);
+  log(`committed all ${commits.length} commits`);
+  await execAsync(`cd ${COMMITS_FOLDER_PATH} && git push origin master`);
 
 }
 
@@ -131,8 +130,13 @@ async function main() {
   COMMITS = COMMITS.sort(function (a, b) {
     return new Date(a.creationDate) - new Date(b.creationDate);
   });
-  console.log(`got toal of ${COMMITS.length} pr`);
+  console.log(`got toal of ${COMMITS.length} commits`);
   generateGitCommits(COMMITS)
 }
 
 main()
+
+
+function log(message, ...optionalParams) {
+  if(process.env.VERBOSE == "1") console.log(message, optionalParams);
+}
