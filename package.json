@@ -1,5 +1,5 @@
 {
-  "name": "gameball-commits-tracker",
+  "name": "azuredevops-commits-migrator",
   "version": "1.0.0",
   "main": "script.js",
   "scripts": {

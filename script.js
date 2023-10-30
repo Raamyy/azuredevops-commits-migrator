@@ -13,6 +13,8 @@ const AZURE_PAT = process.env.PAT;
 const AUTH_TOKEN = Buffer.from(":" + AZURE_PAT).toString('base64')
 const ORG = process.env.ORG;
 
+const COMMITS_FOLDER_PATH = process.env.COMMITS_FOLDER_PATH ?? ".";
+
 async function getProjects() {
   const url = `https://dev.azure.com/${ORG}/_apis/projects?api-version=7.1-preview.4`;
   let config = {
@@ -98,19 +100,21 @@ async function getCommits(project, repo, author, branch) {
 async function generateGitCommits(commits) {
   if (!commits.length) return;
   let i = 1;
+  console.log(COMMITS_FOLDER_PATH);
+  console.log(await execAsync(`ls`));
   for (const commit of commits) {
     let formattedDate = moment(commit.creationDate).format('YYYY-MM-DD HH:MM:SS');
     const text = `### _${formattedDate}_ **${commit.comment}** ([link](${commit.remoteUrl}))\n\n`
-    fs.appendFileSync('README.md', text, { flag: 'a+' });
-    await execAsync(`git add README.md`);
+    fs.appendFileSync(`${COMMITS_FOLDER_PATH}/README.md`, text, { flag: 'a+' });
+    await execAsync(`cd ${COMMITS_FOLDER_PATH} && git add README.md`);
     await execAsync(`set GIT_COMMITTER_DATE='${formattedDate}'`);
     await execAsync(`set GIT_AUTHOR_DATE='${formattedDate}'`);
-    await execAsync(`git commit -m "${commit.comment}" --date "${formattedDate}"`);
+    await execAsync(`cd ${COMMITS_FOLDER_PATH} && git commit -m "${commit.comment}" --date "${formattedDate}"`);
     console.log(`${i}/${commits.length}`);
     i++;
   }
   console.log(`committed all ${commits.length} commits`);
-  await execAsync(`git push origin master`);
+  // await execAsync(`git push origin master`);
 
 }
 
