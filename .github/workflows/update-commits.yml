@@ -1,7 +1,7 @@
 name: Sync commits with azure devops
 
 on:
-  # workflow_dispatch:
+  workflow_dispatch:
   schedule:
   - cron: "31 0 * * *" # run every day
 
