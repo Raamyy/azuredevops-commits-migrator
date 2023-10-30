@@ -1,0 +1,39 @@
+name: Sync commits with azure devops
+
+on:
+  # workflow_dispatch:
+  schedule:
+  - cron: "31 0 * * *" # run every day
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  sync:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        token: ${{secrets.GH_WRITE_TOKEN}}
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: 🔧 Update git configs
+      run: git config --global user.email "ramyeg26@gmail.com" && git config --global user.name "Raamyy"
+
+    - name: ⚙ Install node dependencies
+      run: npm i
+
+    - name: 🚀 Sync with azure
+      run: npm run start
+      env:
+        PAT: ${{secrets.PAT}}
+        ORG: ${{secrets.ORG}}
+        DAYS_LOOKUP: ${{secrets.DAYS_LOOKUP}}
+
+    
