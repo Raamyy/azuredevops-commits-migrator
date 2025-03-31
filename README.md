@@ -42,16 +42,13 @@ Before you begin, ensure you have:
 # Getting Started
 
 
-1. Fork this repository
+1. Fork this repository\
+  Click the Fork button in the top-right corner of this page to fork the main repository.
 
-Click the Fork button in the top-right corner of this page to fork the main repository.
-
-2. Set Up Your Dummy Repository
-
+2. Set Up Your Dummy Repository\
 Create a new private repository on your GitHub account. This will be used to store the migration contributions in a README.md file.
 
-3. Generate a GitHub Token
-
+3. Generate a GitHub Token\
 You will need a GitHub Personal Access Token (PAT) with the following permissions:
   repo (Full control of private repositories)
   workflow (Read and write workflows)
@@ -69,15 +66,17 @@ Select the necessary scopes and copy the token.
 
 In your forked repository, open the .github/workflows/migrate.yml file. You will need to update the following fields:
 
-Azure DevOps organization name: Your Azure DevOps organization.
-Dummy repository name: The private repository you created earlier.
-GitHub username and email: Your GitHub account details.
-yaml
-Copy code
+    Azure DevOps organization name: Your Azure DevOps organization.
+    Dummy repository name: The private repository you created earlier.
+    GitHub username and email: Your GitHub account details.
+
+
+```yaml
 env:
   AZURE_ORG: "your-azure-devops-organization"    # Your Azure DevOps organization
   TRACKER_REPO: "your-private-dummy-repo"          # Name of your dummy repository
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        # GitHub token to authenticate and push to the dummy repo
+```
 2. Add the GitHub Token
 Add your GitHub token as a repository secret in your fork:
 
