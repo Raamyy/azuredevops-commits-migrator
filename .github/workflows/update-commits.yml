@@ -30,7 +30,7 @@ jobs:
         node-version: 16
 
     - name: 🔧 Update git configs
-      run: git config --global user.email "iwan.li@outlook.com" && git config --global user.name "Iwan Li"
+      run: git config --global user.email "${{secrets.USER_EMAIL}}" && git config --global user.name "${{secrets.USER_NAME}}"
 
     - name: ⚙ Install node dependencies
       run: npm i
@@ -44,5 +44,6 @@ jobs:
         ORG: ${{secrets.ORG}}
         DAYS_LOOKUP: ${{secrets.DAYS_LOOKUP}}
         COMMITS_FOLDER_PATH: ../tracker
+        AZURE_NAME: ${{secrets.AZURE_NAME}}
 
     

@@ -15,6 +15,8 @@ const ORG = process.env.ORG;
 
 const COMMITS_FOLDER_PATH = process.env.COMMITS_FOLDER_PATH ?? ".";
 
+const AZURE_NAME = process.env.AZURE_NAME ?? "";
+
 async function getProjects() {
   const url = `https://dev.azure.com/${ORG}/_apis/projects?api-version=7.1-preview.4`;
   let config = {
@@ -118,12 +120,16 @@ async function generateGitCommits(commits) {
 }
 
 async function main() {
+  if(AZURE_NAME == "") {
+    console.error("AZURE_NAME is not set. Please add it to the github secrets with your Azure username. exiting...");
+    return;
+  }
   let COMMITS = [];
   let projects = await getProjects();
   for (let project of projects) {
     let repositories = await getRepositories(project);
     for (let repo of repositories) {
-      let commits = await getCommits(project, repo.name, "Iwan Li", repo.defaultBranch);
+      let commits = await getCommits(project, repo.name, AZURE_NAME, repo.defaultBranch);
       COMMITS = COMMITS.concat(commits);
     }
   }
