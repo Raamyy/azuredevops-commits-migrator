@@ -123,7 +123,7 @@ async function main() {
   for (let project of projects) {
     let repositories = await getRepositories(project);
     for (let repo of repositories) {
-      let commits = await getCommits(project, repo.name, "Iwan Li", repo.defaultBranch);
+      let commits = await getCommits(project, repo.name, "Raamyy", repo.defaultBranch);
       COMMITS = COMMITS.concat(commits);
     }
   }
