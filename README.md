@@ -37,3 +37,6 @@ Click your avatar in github, find settings -> Develop settings -> Personal acces
 
 ## Set Azure PAT
 user settings (in your project right top) -> Personal access tokens -> New token (Simply give all access)
+
+
+Written by [Iwan Li](https://github.com/Iwan-LMX)
