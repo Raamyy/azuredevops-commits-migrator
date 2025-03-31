@@ -13,7 +13,10 @@ This project helps users migrate commits and Pull Requests (PRs) from an Azure D
 3. Change this line property in `update-comits.yml` by your information:\
   `run: git config --global user.email "<your github email>" && git config --global user.name "<your github user name>"`
 
-4. Add secrets:\
+4. Change the name in `script.js` at line 126\
+  `let commits = await getCommits(project, repo.name, "<Your azure commit user name>", repo.defaultBranch);`
+
+5. Add secrets:\
   settings -> Actions secrets and variables -> Repository secrets -> New repository secrets
   ![alt text](resources/image.png)
 
@@ -29,7 +32,7 @@ This project helps users migrate commits and Pull Requests (PRs) from an Azure D
     TRACKER_REPO	# Your destination Github Repository e.g. `Iwan-LMX/azuredevops-commits-migrator` is the value
 
     ```
-5. Run the workflow\
+6. Run the workflow\
 	Actions -> Sync commits with azure devops -> run workflow
 	![alt text](resources/image2.png)
 ## Set Github PAT
