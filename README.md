@@ -29,7 +29,7 @@ This project helps users migrate commits and Pull Requests (PRs) from an Azure D
 
     PAT				# Your Azure PAT, you'll know how to get it below
 
-    TRACKER_REPO	# Your destination Github Repository e.g. `Iwan-LMX/azuredevops-commits-migrator` is the value
+    TRACKER_REPO	# Your destination Github Repository e.g. `Iwan-LMX/azuredevops-commits-migrator` is the value, see below for setting it
 
     ```
 6. Run the workflow\
@@ -41,5 +41,10 @@ Click your avatar in github, find settings -> Develop settings -> Personal acces
 ## Set Azure PAT
 user settings (in your project right top) -> Personal access tokens -> New token (Simply give all access)
 
+## For the TRACKER_REPO
+For this repo you can choose private or public as you want. But this default branch name should be `master` (I have set it to main but not work). 
 
-Written by [Iwan Li](https://github.com/Iwan-LMX)
+You can create a `README.md` by default with some description as well.
+
+
+<!-- Written by [Iwan Li](https://github.com/Iwan-LMX) -->
