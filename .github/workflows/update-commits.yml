@@ -30,7 +30,7 @@ jobs:
         node-version: 16
 
     - name: 🔧 Update git configs
-      run: git config --global user.email "ramyeg26@gmail.com" && git config --global user.name "Raamyy"
+      run: git config --global user.email "iwan.li@outlook.com" && git config --global user.name "Iwan Li"
 
     - name: ⚙ Install node dependencies
       run: npm i
