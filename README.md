@@ -4,100 +4,36 @@ Azure DevOps to GitHub Migration Tool
 This project helps users migrate commits and Pull Requests (PRs) from an Azure DevOps repository to a GitHub repository. It uses a GitHub workflow to automate the migration process.
 
 
-# Overview
-
-
-This project consists of two repositories:
-
-Main Repository: Contains the migration code.
-
-Dummy Repository: A private repository to store contributions as lines in the README.md file, simulating PR and commit additions.
-
-A GitHub workflow automates the migration process, transferring commits and PRs from Azure DevOps to GitHub.
-
-
-# How It Works
-
-
-The user forks this repository.
-
-The user updates specific variables in the GitHub workflow to include their Azure DevOps organization details and a personal GitHub token.
-
-The workflow fetches the commits and PRs from Azure DevOps and pushes them to the dummy repository, adding them as contributions.
-
-
-# Prerequisites
-
-Before you begin, ensure you have:
-
-- A GitHub account.
-
-- A private dummy GitHub repository.
-
-- Access to an Azure DevOps organization with repositories.
-
-- A GitHub Personal Access Token (PAT) with repo and workflow permissions.
-
-
 # Getting Started
-
-
 1. Fork this repository\
-  Click the Fork button in the top-right corner of this page to fork the main repository.
+  Click the Fork button in the top-right corner of this page to fork the master repository.
 
-2. Set Up Your Dummy Repository\
-Create a new private repository on your GitHub account. This will be used to store the migration contributions in a README.md file.
+2. Go to forked repo in your repository
 
-3. Generate a GitHub Token\
-You will need a GitHub Personal Access Token (PAT) with the following permissions:
-  repo (Full control of private repositories)
-  workflow (Read and write workflows)
+3. Change this line property in `update-comits.yml` by your information:\
+  `run: git config --global user.email "<your github email>" && git config --global user.name "<your github user name>"`
 
-## To generate a token:
+4. Add secrets:\
+  settings -> Actions secrets and variables -> Repository secrets -> New repository secrets
+  ![alt text](resources/image.png)
 
-Go to Settings > Developer settings > Personal access tokens.
-Click Generate new token.
-Select the necessary scopes and copy the token.
+    ```
+    DAYS_LOOKUP		# It's a number, I set to 7. I'm not sure for it's usage
 
+    GH_WRITE_TOKEN	# This is Github PAT, you'll know how to set below
 
-# Configuration
+    ORG				# Your Azure DevOps Organization name (e.g. `dev.azure.com/abcd` abcd is the value)
 
-1. Edit the GitHub Workflow
+    PAT				# Your Azure PAT, you'll know how to get it below
 
-In your forked repository, open the .github/workflows/migrate.yml file. You will need to update the following fields:
+    TRACKER_REPO	# Your destination Github Repository e.g. `Iwan-LMX/azuredevops-commits-migrator` is the value
 
-    Azure DevOps organization name: Your Azure DevOps organization.
-    Dummy repository name: The private repository you created earlier.
-    GitHub username and email: Your GitHub account details.
+    ```
+5. Run the workflow\
+	Actions -> Sync commits with azure devops -> run workflow
+	![alt text](resources/image2.png)
+## Set Github PAT
+Click your avatar in github, find settings -> Develop settings -> Personal access tokens (classic) / Fine-grained personal access tokens -> make sure the your target github repo is covered in the `Repository access`
 
-
-```yaml
-env:
-  AZURE_ORG: "your-azure-devops-organization"    # Your Azure DevOps organization
-  TRACKER_REPO: "your-private-dummy-repo"          # Name of your dummy repository
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        # GitHub token to authenticate and push to the dummy repo
-```
-2. Add the GitHub Token
-Add your GitHub token as a repository secret in your fork:
-
-Go to the Settings tab of your forked repository.
-
-Select Secrets and variables > Actions.
-
-Click New repository secret.
-
-Name it GITHUB_TOKEN and paste your token in the value field.
-
-
-Running the Workflow
-
-
-Once the configuration is complete, the GitHub workflow will run automatically once per day.
-
-The workflow will fetch commits and PRs from your Azure DevOps organization and push contributions to the dummy repository in the form of lines added to the README.md file.
-
-
-# Contributing
-
-
-Contributions are welcome! Please open an issue or submit a pull request if you would like to improve the tool.
+## Set Azure PAT
+user settings (in your project right top) -> Personal access tokens -> New token (Simply give all access)
